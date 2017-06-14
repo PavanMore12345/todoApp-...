@@ -182,6 +182,7 @@ $scope.reminder = function(id, day, time) {
            if (out.data.status == true) {
                console.log(out.data);
                $scope.showreminder = true;
+               toastr.success("reminder set successfully");
                // console.log(out.data.message.reminder);
                // $scope.day=day;
                // $scope.remind =out.data.message.reminder;

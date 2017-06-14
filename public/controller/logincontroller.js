@@ -10,13 +10,15 @@ app.controller('loginController', function($scope,$location,loginService,$state)
                     if(response.data.status)
                     {
                     //$state.go("home");
+                     toastr.success('login  successfully');
                     alert("login success");
                     $state.go("todo");
                     // $state.go("todopage");
                   }
                   else {
                     // console.log("fgfgfd");
-                    // $location.path("/signup");
+                    // $location.path("/signup")
+                     toastr.error('Something is wrong');
                     $state.go("login");
                     $scope.user="";
                   }

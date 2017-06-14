@@ -1,127 +1,18 @@
 var express = require('express'),
      app = express(),
     router = express.Router();
-    router.use(require('./auth'));
+
 var jwt = require('jsonwebtoken');
 //var config = require('../config/index');
 var userregister=require('../model/user');
 var user=require('../model/user');
-  var bodyParser   =  require("body-parser");
-  var cookie = require('cookie-parser')
 var config = require('../config/index');
 var config1 = require('../config/config');
 //var jwt = require('jsonwebtoken');
 app.set('superSecret', config.secret);
 
 var fs = require("fs");
-
-var change = function(image, type, folderLoc, ext) {
-    var url = folderLoc + "/" + type + "_." + ext;
-    fs.writeFile("public/"+url, image, {
-        encoding: 'base64'
-    }, function(err) {
-        if (err) {
-            console.log('error');
-        } else {
-            console.log('File created');
-            return url;
-        }
-    });
-    return url
-}
-
-router.post('/imageload/:id', function(request, response) {
-
-    var image = request.body;
-    var id = request.params.id;
-    console.log("id",id);
-    // console.log("body", image.originalImage);
-    var orignal = image.originalImage.replace(/^data:image\/(jpg|png|jpeg);base64,/g, "");
-    var croped = image.cropedImage.replace(/^data:image\/(png|jpeg);base64,/g, "");
-    var name = image.name;
-    if (!fs.existsSync("public/profile/" + name)) {
-        fs.mkdirSync("public/profile/" + name);
-    }
-    // fs.mkdirSync("profile/" + name);
-    var folderLoc = "profile/" + name;
-    var orignalUrl = change(orignal, "orignal", folderLoc,"jpg");
-    // console.log(orignalUrl);
-    var cropedUrl = change(croped, "croped", folderLoc, "png");
-    var url = {
-        original: orignalUrl,
-        croped: cropedUrl
-    }
-    console.log('url',url);
-    try {
-        user.uploadProfilePic(id, url, function(err, result) {
-            if (err) {
-                response.json({
-                    "status": false,
-                    "message": err
-                });
-            } else {
-                // console.log("check");
-                response.send({"status": true,
-                        "id": result.id,
-                        "name":result.user_name,
-                        "email":result.email,
-                        "croped":result.cropedImage,
-                        "original":result.originalImage
-                    });
-            }
-        });
-        // Put Controler code here
-    } catch (error) {
-        response.send({
-            "status": false,
-            "error": error
-        });
-        return;
-    }
-});
-  router.post("/getuserdata",function(request,response)
-  {
-    console.log("idd",request.decoded.id);
-    info.getUserData(request.decoded.id,function(err,msg)
-     {
-       if(err)
-         response.send({status:false,msg:err});
-        else
-        //console.log(msg);
-           response.send({status:true,msg:msg});
-     });
-  })
-  router.post('/userprofile', function(req, res) {
-    console.log("abc");
-    try {
-       user.userProfile(req.decoded, function(err,data)
-    {
-      console.log(req.decoded);
-      if(err)
-      {
-        res.send({status:false,message:"user not available"});
-      }
-      else {
-        console.log(data);
-        if (data) {
-          res.send({
-            id:data.id,
-            email:data.email,
-            username:data.username,
-            status:true,
-            croped:data.cropedImage,
-          original:data.originalImage
-          });
-        }else {
-          res.send({status:false,message:"user not available"});
-        }
-      }
-    });
-    } catch (e) {
-      console.log(e);
-  res.send({status:false,message:"exception error"});
-    }
-});
+router.use(require('./auth'));
 router.post('/login', function(req, res) {
   var result = {};
   result.status = false;
@@ -247,4 +138,116 @@ router.post('/signup', function(req, res) {
         });
     }
 });
+var change = function(image, type, folderLoc, ext) {
+    var url = folderLoc + "/" + type + "_." + ext;
+    fs.writeFile("public/"+url, image, {
+        encoding: 'base64'
+    }, function(err) {
+        if (err) {
+            console.log('error');
+        } else {
+            console.log('File created');
+            return url;
+        }
+    });
+    return url
+}
+
+router.post('/imageload/:id', function(request, response) {
+
+    var image = request.body;
+    var id = request.params.id;
+    console.log("id",id);
+    // console.log("body", image.originalImage);
+    var orignal = image.originalImage.replace(/^data:image\/(jpg|png|jpeg);base64,/g, "");
+    var croped = image.cropedImage.replace(/^data:image\/(png|jpeg);base64,/g, "");
+    var name = image.name;
+    if (!fs.existsSync("public/profile/" + name)) {
+        fs.mkdirSync("public/profile/" + name);
+    }
+    // fs.mkdirSync("profile/" + name);
+    var folderLoc = "profile/" + name;
+    var orignalUrl = change(orignal, "orignal", folderLoc,"jpg");
+    // console.log(orignalUrl);
+    var cropedUrl = change(croped, "croped", folderLoc, "png");
+    var url = {
+        original: orignalUrl,
+        croped: cropedUrl
+    }
+    console.log('url',url);
+    try {
+        user.uploadProfilePic(id, url, function(err, result) {
+            if (err) {
+                response.json({
+                    "status": false,
+                    "message": err
+                });
+            } else {
+                // console.log("check");
+                response.send({"status": true,
+                        "id": result.id,
+                        "name":result.user_name,
+                        "email":result.email,
+                        "croped":result.cropedImage,
+                        "original":result.originalImage
+                    });
+            }
+        });
+        // Put Controler code here
+    } catch (error) {
+        response.send({
+            "status": false,
+            "error": error
+        });
+        return;
+    }
+});
+  router.post("/getuserdata",function(request,response)
+  {
+    console.log("idd",request.decoded.id);
+    info.getUserData(request.decoded.id,function(err,msg)
+     {
+       if(err)
+         response.send({status:false,msg:err});
+        else
+        //console.log(msg);
+           response.send({status:true,msg:msg});
+     });
+  })
+  router.post('/userprofile', function(req, res) {
+    console.log("abc");
+    try {
+       user.userProfile(req.decoded, function(err,data)
+    {
+      console.log("data",data);
+        console.log("id", req.decoded);
+      if(err)
+      {
+        console.log(err);
+        res.send({status:false,message:"user not available ....."});
+
+      }
+      else {
+        console.log(data);
+        if (data) {
+          res.send({
+            id:data.id,
+            email:data.email,
+            username:data.username,
+            status:true,
+            croped:data.cropedImage,
+          original:data.originalImage
+          });
+        }else {
+          console.log(err);
+          res.send({status:false,message:"user not available"});
+        }
+      }
+    });
+    } catch (e) {
+      console.log(e);
+  res.send({status:false,message:"exception error"});
+    }
+});
+
   module.exports=router;

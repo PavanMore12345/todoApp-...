@@ -8,6 +8,8 @@ var connect1 = mongo.connect('mongodb://127.0.0.1/mydb2');
 autoIncrement.initialize(connect1);
 var Schema = mongo.Schema;
 var userSchema = Schema({
+  local:
+  {
   _id:
    {
      type: Number,
@@ -41,7 +43,28 @@ var userSchema = Schema({
    cropedImage: {
      type:String
    }
-},{collection: "userReg"});
+ },
+ fb:
+ {
+       id: String,
+       access_token: String,
+       firstName: String,
+       lastName: String,
+       email: String,
+       gender: String,
+       profile: String
+   },
+   google: {
+       id: String,
+       access_token: String,
+       firstName: String,
+       lastName: String,
+       email: String,
+       gender: String,
+       profile: String
+   }
+}
+,{collection: "userReg"});
 userSchema.plugin(autoIncrement.plugin, {
     model: 'User',
     field: '_id',
@@ -79,7 +102,7 @@ self.findOne({email:data.email},function(err,exist)
 userSchema.statics.userProfile=function(data,callback)
 {
   var self=this;
-  self.findById(data.id1, callback );
+  self.findById(data.id, callback );
   //  console.log("findbyid");
 
       //console.log(req.decoded.Userobj.email);
@@ -106,35 +129,29 @@ userSchema.statics.uploadProfilePic = function(userId, url, cb) {
     console.log("id is", id);
                     User.find({id1:id},callback);
                   }
+                  userSchema.virtual('u_id').get(function() {
+                      return this._id.toHexString();
+                  });
+                  userSchema.set('toJSON', {
+                      virtuals: true,
+                      transform: function(doc, ret, options) {
+                          ret.u_id = ret._id;
 
-    // this.update({
-    //     _id: userId
-    // }, {
-    //     $set: {
-    //       originalImage : url.original,
-    //       cropedImage : url.croped
-    //     }
-    // }, cb);
-//hookes for encrypt the password before saving
-// userSchema.pre('save', function(next) {
-//     var user = this;
-//     //encrypt password when it is changed and save
-//     if (!user.isModified('password')) {
-//       next();
-//       return;
-//     }
-//
-//     //just encrypt the password before saving
-//     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-//         if (err) return next(err);
-//         bcrypt.hash(user.password, salt, function(err, hash) {
-//             if (err) return next(err);
-//
-//             user.password = hash;
-//             // console.log("hash",hash);
-//             next();
-//         });
-//     });
-// });
+                          if(ret.fb||ret.google||ret.local)
+                          if (ret.fb && ret.fb.profile) {
+                              ret.fb.profile = JSON.parse(ret.fb.profile);
+                          }
+                          else
+                          if (ret.google && ret.google.profile) {
+                              ret.google.profile = JSON.parse(ret.google.profile);
+                          }
+                          else
+                          if (ret.local && ret.local.profile) {
+                              ret.local.profile = JSON.parse(ret.local.profile);
+                          }
+                          delete ret._id;
+                          return ret;
+                      }
+                  });
 var User = connect1.model('User', userSchema);
 module.exports=User;
