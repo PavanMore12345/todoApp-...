@@ -12,7 +12,7 @@ var config1 = require('../config/config');
 app.set('superSecret', config.secret);
 
 var fs = require("fs");
-router.use(require('./auth'));
+
 router.post('/login', function(req, res) {
   var result = {};
   result.status = false;
@@ -138,6 +138,7 @@ router.post('/signup', function(req, res) {
         });
     }
 });
+router.use(require('./authenticate'));
 var change = function(image, type, folderLoc, ext) {
     var url = folderLoc + "/" + type + "_." + ext;
     fs.writeFile("public/"+url, image, {
@@ -214,7 +215,7 @@ router.post('/imageload/:id', function(request, response) {
            response.send({status:true,msg:msg});
      });
   })
-  router.post('/userprofile', function(req, res) {
+  router.get('/userprofile', function(req, res) {
     console.log("abc");
     try {
        user.userProfile(req.decoded, function(err,data)

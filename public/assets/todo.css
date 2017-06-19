@@ -381,10 +381,10 @@ color:black;
         padding-left: 0;
     }
     #content
-    {
-      min-width: 400px;
-      margin-left: -56px;
-    }
+     {
+       min-width: 400px;
+       margin-left: -56px;
+     }
     /*#card{
     width:400px;
     }
@@ -405,7 +405,7 @@ color:black;
     }*/
     #card
     {
-      min-width: 300px;
+      min-width: 360px;
     }
 
     #sidebar-wrapper {
@@ -524,7 +524,7 @@ margin-left: 20px;
 }
 #content
 {
-  width:100%;
+  width:83%;
   padding-left: 66px;
 }
 #profileimg {

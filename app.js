@@ -14,7 +14,7 @@ app.use(require('./controller/index.js'));
 //app.use(express.static("./public"));
 
 
-var port = 8100;
+var port = 8040;
 app.listen(port,function () {
   // connect();
   console.log("listning from the port" +port);

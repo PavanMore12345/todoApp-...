@@ -8,28 +8,26 @@ var connect1 = mongo.connect('mongodb://127.0.0.1/mydb2');
 autoIncrement.initialize(connect1);
 var Schema = mongo.Schema;
 var userSchema = Schema({
-  local:
-  {
   _id:
    {
      type: Number,
-    unique:true
+    // unique:true
   },
   email: {
     type:String,
-    required:true,
+    //required:true,
     //unique: true,
     lowercase: true,
     validate:validators.isEmail()
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
     match:new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/)
   },
   username: {
     type: String,
-    required: true,
+    // required: true,
     validate: [validators.isAlphanumeric(), validators.isLength(4, 60)]
   },
   references:
@@ -43,7 +41,7 @@ var userSchema = Schema({
    cropedImage: {
      type:String
    }
- },
+,
  fb:
  {
        id: String,
@@ -130,7 +128,7 @@ userSchema.statics.uploadProfilePic = function(userId, url, cb) {
                     User.find({id1:id},callback);
                   }
                   userSchema.virtual('u_id').get(function() {
-                      return this._id.toHexString();
+                      return this.id.toString();
                   });
                   userSchema.set('toJSON', {
                       virtuals: true,

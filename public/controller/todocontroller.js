@@ -1,4 +1,5 @@
-app.controller('todoController',function($scope,$location,$uibModal,$rootScope,todoService,$timeout,logoutService,datainsertion,getcardData,datadeletion,dataupdation,colorchange,copyContent)
+app.controller('todoController',function($http,$auth,$scope,$location,$uibModal,$rootScope,todoService,$timeout,logoutService,datainsertion,
+  getcardData,datadeletion,dataupdation,colorchange,copyContent)
 {
   //$scope.class="col-sm-6 col-lg-4 col-lg-12 item"
   //console.log($scope.open);
@@ -67,6 +68,27 @@ var modalInstance = $uibModal.open({
 });
 
 }
+
+// $scope.readuser = function() {
+//        $http.get('/userprofile', {
+//                headers: {
+//                    "x-access-token": $auth.getToken
+//                }
+//            })
+//            .then(function(data) {
+//                console.log(data);
+//                if (data.data.user.fb) {
+//                    $scope.user = data.data.user.fb;
+//                } else if (data.data.user.google) {
+//                    $scope.user = data.data.user.google;
+//                } else {
+//                    $scope.user = data.data.user.local;
+//                }
+//            })
+//            .catch(function(data) {
+//                console.log('Error: ' + data);
+//            });
+//    };
 $scope.listview = function() {
     localStorage.setItem("view", "list");
     // $scope.showgrid = false;
@@ -174,9 +196,9 @@ $scope.reminder = function(id, day, time) {
        console.log(error);
      })
    }
-   //call reminders api
    var reminderCall=function(remind, id, day) {
        var callReimnder = todoService.app("/reminders/" + id + "","post",remind);
+       //call reminders api
        callReimnder.then(function(out) {
            // console.log("out",out);
            if (out.data.status == true) {
@@ -378,6 +400,7 @@ $scope.getData11();
 });
 app.service("logoutService",function($http) {
     this.logoutPage = function() {
+
         return $http({
             url: "/logout",
             method: "post"
@@ -400,6 +423,7 @@ app.service("copyContent",function($http)
 {
   this.copydata=function(todo)
   {
+
     console.log(todo);
     return $http({
     url:"/addcard",
@@ -412,6 +436,7 @@ app.service("datadeletion",function($http)
 {
 this.delete = function(id)
 {
+
   return $http({
     url: "/deletecard/" + id + "",
     method:"delete"

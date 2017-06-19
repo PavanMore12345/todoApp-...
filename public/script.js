@@ -1,5 +1,5 @@
 //var scotchApp = angular.module('scotchApp', []);
-var app = angular.module('app', ['ui.router', 'ngSanitize', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ngImgCrop'])
+var app = angular.module('app', ['ui.router','ngAnimate', 'ngSanitize','ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ngImgCrop','satellizer'])
   .config(function($stateProvider, $urlRouterProvider) {
 
 
@@ -55,3 +55,20 @@ var app = angular.module('app', ['ui.router', 'ngSanitize', 'ui.bootstrap', 'ui.
         }
     };
 }]);
+  // window.fbAsyncInit = function() {
+  //   FB.init({
+  //     appId            : '1689573841352159',
+  //     autoLogAppEvents : true,
+  //     xfbml            : true,
+  //     version          : 'v2.9'
+  //   });
+  //   FB.AppEvents.logPageView();
+  // };
+  //
+  // (function(d, s, id){
+  //    var js, fjs = d.getElementsByTagName(s)[0];
+  //    if (d.getElementById(id)) {return;}
+  //    js = d.createElement(s); js.id = id;
+  //    js.src = "//connect.facebook.net/en_US/sdk.js";
+  //    fjs.parentNode.insertBefore(js, fjs);
+  //  }(document, 'script', 'facebook-jssdk'));

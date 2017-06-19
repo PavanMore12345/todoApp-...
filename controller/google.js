@@ -1,12 +1,14 @@
 /**
  * google login controller
  */
-
+ var express = require('express'),
+  app = express(),
+ router = express.Router();
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('../model/user');
 var googleConfig = require('../config/auth');
 var passport = require('passport');
-
+var jwt    = require('jsonwebtoken');
 module.exports = function(passport) {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -27,6 +29,13 @@ module.exports = function(passport) {
         // asynchronous
         process.nextTick(function() {
             console.log(profile);
+            var token = jwt.sign({
+                id: profile._id
+            }, config.secret, {
+                expiresIn: 1440*60 // expires in 24 hours
+            });
+            console.log(token);
+            localStorage.setItem('myKey', token);
             // find the user in the database based on their google id
             User.findOne({
                 'google.id': profile.id

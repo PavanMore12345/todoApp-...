@@ -47,7 +47,7 @@
                     <li>
                         <a id="gridview" uib-tooltip="Grid View" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="gridview()" ng-style="grid"><img src="image/icons8-Grid 2 Filled-20.png"></a>
                     </li>
-                      <li id="li" uib-dropdown>
+                      <li id="li" uib-dropdown ng-init="readuser()">
                         <a id="profileancor" uib-tooltip="Profile" tooltip-placement="bottom" tooltip-append-to-body="true" uib-dropdown-toggle >
                             <img  id="profileimg"  ng-src="{{profilepic}}">
                         </a>
@@ -61,9 +61,9 @@
                     <div>
                       <br>
                       <div>
-                        <div><b>name</b> : {{userName}}
+                        <div><b>name</b> : {{ user.userName}}
                         </div>
-                        <div><b>email </b>: {{userEmail}}
+                        <div><b>email </b>: {{user.email}}
                         </div>
                       </div>
                       <a id="logout" uib-tooltip="Log out" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="logoutPage()" style="text-align:center;margin-right: 124px;margin-top: 13px;">

@@ -3,7 +3,7 @@ var express = require('express'),
     router = express.Router(),
     addcard = require('../model/cardSchema');
     userData = require('../model/cardSchema');
-router.use(require('./auth'));
+router.use(require('./authenticate'));
 router.post('/addcard', function(req, res) {
     console.log(req.decoded);
     try {

@@ -1,5 +1,5 @@
 // var app = angular.module('scotchApp', []);
-app.controller('loginController', function($scope,$location,loginService,$state) {
+app.controller('loginController', function($scope,$location,loginService,googleloginService,$state) {
             $scope.loginPage = function() {
               console.log("SDfssds");
                 var user = $scope.user;
@@ -27,7 +27,13 @@ app.controller('loginController', function($scope,$location,loginService,$state)
                     // this function handles error
                 });
             }
-
+$scope.google=function(){
+  var httpobj = googleloginService.google();
+  httpobj.then(function(response)
+   {
+console.log(response);
+   })
+}
 
           });
           app.service("loginService", function($http) {
@@ -36,6 +42,15 @@ app.controller('loginController', function($scope,$location,loginService,$state)
                       url: "/login",
                       method: "post",
                       data: user
+                  });
+              }
+          });
+          app.service("googleloginService", function($http) {
+              this.loginPage = function() {
+                  return $http({
+                      url: "/google/callback",
+                      method: "get",
+                      // data: user
                   });
               }
           });
